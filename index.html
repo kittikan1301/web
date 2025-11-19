@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สื่อการสอนออนไลน์ - การวิเคราะห์และออกแบบระบบ</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-title">สื่อการสอนออนไลน์</div>
+            <div class="logo-subtitle">วิชา การวิเคราะห์และออกแบบระบบ</div>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active">หน้าหลัก</a>
+            <a href="lessons.html">บทเรียน</a>
+            <a href="#">โปรไฟล์และความก้าวหน้า</a>
+            
+        </div>
+        <div class="nav-auth">
+        <a href="login.html" class="btn-login">เข้าสู่ระบบ</a>
+        <a href="register.html" class="btn-register">สมัครสมาชิก</a>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="hero-image-placeholder">
+          <img src="C:\Users\fluke\Downloads\หน้าหลัก.png" alt="รูปผู้หญิง" width="500" height="300" >
+        </div>
+        <div class="hero-text">
+            <h1>การวิเคราะห์และ<br>ออกแบบระบบ</h1>
+            <p>การเรียนรู้เนื้อหาได้ง่ายด้วยตัวเองในการเรียนรู้และ<br>สามารถเข้าถึงกิจกรรมในเนื้อหาได้สะดวกเข้าใจ</p>
+        </div>
+    </header>
+
+    <main class="lessons-container">
+        <div class="lessons-header">
+            <h2>บทเรียนทั้งหมด</h2>
+            <span>เรียนแล้ว 6/14</span>
+        </div>
+
+        <div class="carousel-wrapper">
+            <button class="nav-arrow" id="prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+            
+            <div class="lessons-carousel" id="carousel">
+                <div class="lesson-card">
+                    <i class="fa-solid fa-book-open card-icon"></i>
+                    <h3>บทที่ 1</h3>
+                    <button class="btn-lesson">เข้าเรียน</button>
+                </div>
+
+                <div class="lesson-card locked">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h3>บทที่ 2</h3>
+                    <button class="btn-lesson" disabled>เข้าเรียน</button>
+                </div>
+
+                <div class="lesson-card locked">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h3>บทที่ 3</h3>
+                    <button class="btn-lesson" disabled>เข้าเรียน</button>
+                </div>
+
+                <div class="lesson-card locked">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h3>บทที่ 4</h3>
+                    <button class="btn-lesson" disabled>เข้าเรียน</button>
+                </div>
+
+                <div class="lesson-card locked">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h3>บทที่ 5</h3>
+                    <button class="btn-lesson" disabled>เข้าเรียน</button>
+                </div>
+            </div>
+            
+            <button class="nav-arrow" id="next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <a href="lessons.html" class="view-more">ดูเพิ่มเติม</a>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 สื่อการสอนออนไลน์ | adminrtc@rtc.ac.th | 032338544 | 032337228</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
