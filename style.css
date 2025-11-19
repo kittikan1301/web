@@ -1,0 +1,675 @@
+/* --- Background Circuit Pattern --- */
+/* ใช้การไล่ระดับสี (linear-gradient) เพื่อจำลองลวดลายวงจรไฟฟ้า */
+body.lessons-page {
+    /* กำหนดรูปวงจรไฟฟ้าที่ซ้อนกัน 2 ชั้น (สมมติว่าเป็น .lessons-page) */
+    background-image: 
+        /* ชั้นบน (สีฟ้าอ่อน) */
+        linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05)),
+        /* ชั้นล่าง (สีฟ้าอ่อนมาก + ลวดลาย) */
+        url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="circuit" width="10" height="10" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="10" stroke="%23c4e0f9" stroke-width="0.5"/><line x1="0" y1="10" x2="10" y2="0" stroke="%23c4e0f9" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+    background-color: #f4f8ff; /* สีพื้นหลังอ่อน (จากหน้าแรก) */
+    background-size: 100px 100px, cover;
+}
+
+/* * เนื่องจากเราไม่สามารถใช้รูปวงจรไฟฟ้าที่อยู่ด้านข้างได้โดยตรง 
+* เราจะใช้ CSS เพื่อสร้างลวดลายและเพิ่มรูปภาพวงจรไฟฟ้า 
+* (แต่ในตัวอย่างนี้ ผมจะใช้ background-image + SVG data URI จำลองลวดลาย)
+*/
+/* --- Global Styles --- */
+body {
+    font-family: 'Kanit', sans-serif;
+    margin: 0;
+    background-color: #d7eaf8; /* สีพื้นหลังอ่อนๆ */
+    color: #333;
+}
+
+/* --- 1. Navigation Bar --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #d7eaf8;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.nav-left .logo-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #005a9c; /* สีน้ำเงินเข้ม */
+}
+
+.nav-left .logo-subtitle {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.nav-links a {
+    margin: 0 1rem;
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+}
+
+.nav-links a.active {
+    color: hsl(211, 100%, 50%); /* สีน้ำเงิน */
+    font-weight: 700;
+}
+
+.nav-auth a {
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-family: 'Kanit', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.btn-login {
+    background-color: #ffffff;
+    color: #007bff;
+}
+
+.btn-register {
+    background-color: #007bff;
+    color: white;
+}
+
+/* --- 2. Hero Section --- */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background-color: #ffffff;
+    min-height: 300px;
+}
+
+.hero-image-placeholder {
+    font-size: 8rem; /* ขนาดไอคอนตัวอย่าง */
+    color: #c0d9ff;
+    margin-right: 4rem;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #003366;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.hero-text p {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* --- 3. Lessons Section --- */
+.lessons-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+.lessons-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.lessons-header h2 {
+    font-size: 1.8rem;
+    color: #003366;
+}
+
+.lessons-header span {
+    font-size: 1rem;
+    color: #555;
+}
+
+.carousel-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.lessons-carousel {
+    display: flex;
+    overflow-x: hidden; /* ซ่อน scrollbar */
+    scroll-behavior: smooth; /* ทำให้เลื่อนนุ่มนวล */
+    gap: 1.5rem; /* ระยะห่างระหว่างการ์ด */
+    flex-grow: 1;
+    padding: 1rem 0;
+}
+
+.lesson-card {
+    flex: 0 0 250px; /* กำหนดขนาดการ์ด */
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+.lesson-card.locked {
+    opacity: 0.6;
+}
+
+.card-icon {
+    font-size: 3rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+.lesson-card.locked .card-icon {
+    color: #aaa;
+}
+
+.lesson-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.btn-lesson {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: 'Kanit', sans-serif;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.lesson-card.locked .btn-lesson {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.nav-arrow {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+#prev-btn {
+    margin-right: 1rem;
+}
+
+#next-btn {
+    margin-left: 1rem;
+}
+
+.view-more {
+    display: block;
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* --- 4. Footer --- */
+.footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #e9ecef;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+/* --- Lesson Card Styles (ในหน้า Grid) --- */
+
+/* ปรับสีไอคอนตามสถานะ */
+.lesson-card .card-icon {
+    font-size: 3rem;
+    color: #007bff; /* สีน้ำเงินสำหรับสถานะทั่วไป/กำลังเรียน */
+    margin-bottom: 1rem;
+    /* เพิ่ม transition เพื่อให้ดูสวยงาม */
+    transition: color 0.3s; 
+}
+
+/* ไอคอนการ์ดที่เรียนจบแล้ว (เปลี่ยนเป็นสีเขียวเข้ม) */
+.lesson-card.completed .card-icon {
+    color: #28a745; /* สีเขียว */
+}
+
+/* ตกแต่งสถานะข้อความ "เรียนจบแล้ว" "กำลังเรียน" */
+.lesson-card .status-text {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 0.85rem;
+    font-weight: 700; /* ทำให้หนาขึ้น */
+    /* เพิ่มเส้นใต้จางๆ ให้ข้อความดูเป็นเอกลักษณ์ */
+    border-bottom: 1px solid; 
+    padding-bottom: 2px;
+}
+
+.lesson-card .status-text.green {
+    color: #28a745; 
+    border-bottom-color: rgba(40, 167, 69, 0); /* เส้นสีเขียวจาง */
+}
+.lesson-card .status-text.orange {
+    color: #fd7e14;
+    border-bottom-color: rgba(253, 126, 20, 0); /* เส้นสีส้มจาง */
+}
+/* ไม่ต้องใช้ .status-text.blue ในหน้านี้ (ใช้ green/orange แทน) */
+
+/* บทเรียนที่ถูกล็อก */
+.lesson-card.locked {
+    opacity: 1; /* ทำให้การ์ดที่ล็อกไม่จาง (ต่างจากหน้าแรก) */
+    /* เปลี่ยนสีไอคอนแม่กุญแจให้เป็นสีเทาอ่อน */
+    background-color: #f7f7f7; 
+}
+.lesson-card.locked .card-icon {
+    color: #ccc; /* สีแม่กุญแจ */
+}
+.lesson-card.locked h3 {
+    color: #888;
+}
+.lesson-card.locked .btn-lesson {
+    background-color: #eee;
+    color: #888;
+    border: 1px solid #ddd;
+}
+
+/* ไฮไลท์การ์ดที่กำลังเรียน (ขอบสีม่วง/น้ำเงินเข้ม) */
+.lesson-card.active {
+    border: 3px solid #005a9c; /* เปลี่ยนเป็นสีน้ำเงินเข้มตามภาพ */
+    box-shadow: 0 6px 15px rgba(0, 90, 156, 0.3);
+}
+
+/* ตกแต่งไอคอนบทเรียนในภาพ ให้มีสีต่างกันเล็กน้อยตามภาพที่ 3 */
+/* ถ้าต้องการสีไอคอนต่างกันจริงๆ (แบบในรูปที่ 3) ให้เพิ่มโค้ดนี้ */
+.icon-stack { color: #005a9c !important; } 
+.icon-diagram { color: #17a2b8 !important; }
+.icon-flow { color: #28a745 !important; }
+.icon-user { color: #ffc107 !important; }
+.icon-robot { color: #dc3545 !important; }
+.icon-desktop { color: #fd7e14 !important; }
+/* ===============================================
+ Styles for Lessons Page (lessons.html) 
+===============================================
+*/
+
+/* --- Background Circuit Pattern (ใช้รูปภาพ) --- */
+body.lessons-page {
+    background-color: #f4f8ff; /* สีพื้นหลังหลัก */
+    /* ใช้รูปภาพสำหรับพื้นหลังลวดลายวงจรไฟฟ้า */
+    background-image: url('circuit-background.png'); /* เปลี่ยนชื่อไฟล์ถ้าของคุณต่างไป */
+    background-repeat: no-repeat; /* ไม่ให้รูปซ้ำ */
+    background-size: cover; /* ครอบคลุมพื้นที่ทั้งหมด */
+    background-position: center center; /* จัดรูปภาพให้อยู่ตรงกลาง */
+    background-attachment: fixed; /* ทำให้พื้นหลังอยู่นิ่งเมื่อ scroll */
+
+    /* เราจะใช้ overlay เพื่อให้สีพื้นหลังดูเข้มขึ้นเล็กน้อย (ถ้าต้องการ) */
+    position: relative;
+}
+
+/* หากต้องการให้มี overlay สีทับบนพื้นหลัง (ตามภาพต้นฉบับจะดูจางๆ) */
+body.lessons-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(244, 248, 255, 0.4); /* สีพื้นหลังจางๆ ทับรูป */
+    z-index: -1; /* ให้มันอยู่ข้างหลังเนื้อหา */
+}
+
+
+/* --- Header ของหน้าบทเรียน --- */
+.lessons-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #003366; /* สีน้ำเงินเข้ม */
+    color: white;
+}
+
+.lessons-page-header .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.lessons-page-header .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5); /* ขอบจางลง */
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.lessons-page-header .back-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.lessons-page-header h1 {
+    margin: 0;
+    font-size: 1.8rem; /* ปรับขนาดให้เล็กลงหน่อย */
+}
+
+.lessons-page-header .header-right {
+    text-align: right;
+}
+
+.lessons-page-header .course-title {
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.lessons-page-header .teacher-name {
+    font-size: 0.8rem; /* ปรับขนาดเล็กลงอีก */
+    opacity: 0.8;
+}
+
+/* --- Progress Bar --- */
+.progress-bar-container {
+    max-width: 1200px;
+    margin: 1.5rem auto;
+    padding: 0 2rem;
+    text-align: center; /* จัดข้อความกึ่งกลาง */
+}
+
+.progress-bar-container span {
+    font-size: 1rem; /* เพิ่มขนาดหน่อย */
+    font-weight: 500;
+    color: #005a9c; /* สีน้ำเงินเข้ม */
+}
+
+.progress-bar {
+    width: 30%; /* ปรับความกว้างของ progress bar ให้แคบลง */
+    min-width: 200px; /* ไม่ให้เล็กไปกว่านี้ */
+    max-width: 300px; /* ไม่ให้ใหญ่ไปกว่านี้ */
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+    margin: 0.5rem auto 0 auto; /* จัดกึ่งกลาง */
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #007bff;
+    border-radius: 10px;
+}
+
+/* --- Lesson Grid (ตารางบทเรียน) --- */
+.lesson-grid-container {
+    max-width: 1200px;
+    margin: 1rem auto;
+    padding: 0 2rem;
+}
+
+.lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* ปรับขนาดการ์ดให้เล็กลงหน่อย */
+    gap: 1.5rem; /* ระยะห่างระหว่างการ์ด */
+}
+
+/* --- ปรับแต่งการ์ด --- */
+.lesson-card {
+    position: relative; 
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.2s, box-shadow 0.2s; /* เพิ่ม transition */
+}
+
+.lesson-card:hover:not(.locked) {
+    transform: translateY(-5px); /* ยกขึ้นเล็กน้อยเมื่อชี้เมาส์ */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* รูปไอคอนบทเรียน (สำหรับ img tag) */
+.lesson-card .lesson-icon {
+    width: 60px; /* ขนาดไอคอน */
+    height: 60px; /* ขนาดไอคอน */
+    object-fit: contain; /* รักษาสัดส่วน */
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); /* เพิ่มเงาให้ไอคอน */
+}
+
+/* ไอคอนล็อก (สำหรับ i tag) */
+.lesson-card .lesson-icon-lock {
+    font-size: 3rem; /* ขนาดไอคอนล็อก */
+    color: #ccc; /* สีไอคอนล็อก */
+    margin-bottom: 1rem;
+}
+
+
+/* ตกแต่งสถานะข้อความ "เรียนจบแล้ว" "กำลังเรียน" */
+.lesson-card .status-text {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 0.8rem; /* ลดขนาด */
+    font-weight: 700;
+    padding: 2px 8px; /* เพิ่ม padding */
+    border-radius: 5px; /* ขอบมน */
+}
+
+.lesson-card .status-text.green {
+    background-color: #e6ffe6; /* พื้นหลังสีเขียวอ่อน */
+    color: #28a745; 
+}
+.lesson-card .status-text.orange {
+    background-color: #fff4e6; /* พื้นหลังสีส้มอ่อน */
+    color: #fd7e14;
+}
+
+/* บทเรียนที่ถูกล็อก */
+.lesson-card.locked {
+    opacity: 1; 
+    background-color: #f7f7f7; 
+    border-color: #e9e9e9;
+    cursor: not-allowed;
+}
+.lesson-card.locked h3 {
+    color: #888;
+}
+.lesson-card.locked .btn-lesson {
+    background-color: #eee;
+    color: #888;
+    border: 1px solid #ddd;
+    cursor: not-allowed;
+}
+
+/* การ์ดที่กำลังเรียน (active) */
+.lesson-card.active {
+    border: 3px solid #005a9c; /* สีน้ำเงินเข้ม */
+    box-shadow: 0 0 15px rgba(0, 90, 156, 0.5), inset 0 0 5px rgba(0, 90, 156, 0.2); /* เพิ่มเงาและกรอบเรืองแสง */
+    background-color: #e7f3ff; /* พื้นหลังสีฟ้าอ่อน */
+}
+
+/* ปรับปุ่มเข้าเรียน */
+.btn-lesson {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: 'Kanit', sans-serif;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn-lesson:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+/* Footer (ใช้ร่วมกัน) */
+.footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #e9ecef;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .lessons-page-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+    .lessons-page-header .header-left {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .lessons-page-header .header-right {
+        width: 100%;
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+    .progress-bar-container {
+        padding: 0 1rem;
+    }
+    .lesson-grid-container {
+        padding: 0 1rem;
+    }
+    .lesson-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    .lesson-card {
+        padding: 1rem;
+    }
+    .lesson-card .status-text {
+        font-size: 0.75rem;
+        top: 5px;
+        right: 5px;
+    }
+}
+/* ===============================================
+ Styles for Login Page (login.html) 
+===============================================
+*/
+
+body.login-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+    align-items: center; /* จัดให้อยู่กึ่งกลางแนวนอน */
+    min-height: 100vh; /* ให้เต็มความสูงของหน้าจอ */
+    background-color: #f4f8ff; /* สีพื้นหลังอ่อน (จากธีมเดิม) */
+    position: relative; /* เพื่อให้ปุ่ม back-to-home อ้างอิงได้ */
+}
+
+/* --- ปุ่มกลับหน้าหลัก --- */
+.back-to-home {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.back-to-home:hover {
+    color: #007bff;
+}
+
+/* --- กล่อง Login --- */
+.login-box {
+    background-color: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #003366; /* สีน้ำเงินเข้ม */
+    font-size: 1.8rem;
+}
+
+/* --- ช่องกรอกข้อมูล --- */
+.input-group {
+    margin-bottom: 1.25rem;
+    text-align: left; /* จัดชิดซ้าย */
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: 'Kanit', sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box; /* ป้องกัน padding ทำให้กล่องล้น */
+}
+
+/* --- ปุ่ม Login (ปุ่มหลัก) --- */
+.btn-login-submit {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-family: 'Kanit', sans-serif;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 1rem;
+    transition: background-color 0.2s;
+}
+
+.btn-login-submit:hover {
+    background-color: #0056b3; /* สีเข้มขึ้นเมื่อชี้ */
+}
+
+/* --- ลิงก์ลืมรหัสผ่าน / สมัครสมาชิก --- */
+.login-links {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.login-links a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-links a:hover {
+    text-decoration: underline;
+}
